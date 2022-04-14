@@ -2,6 +2,7 @@ import os
 import tensorflow as tf
 from keras import layers
 from keras.callbacks import TensorBoard
+import numpy as np
 
 
 if __name__ == '__main__':
@@ -70,3 +71,22 @@ if __name__ == '__main__':
         os.makedirs(dirToSave)
     pathToModelSave = os.path.join(dirToSave, 'model.h5')
     model.save(pathToModelSave)
+
+    test_chess_pieces_dir = 'images/images_to_test_model'
+    files = os.listdir(test_chess_pieces_dir)
+
+    for f in files:
+
+        img = tf.keras.utils.load_img(test_chess_pieces_dir+'/'+f, target_size=(98, 98))
+        img_array = tf.keras.utils.img_to_array(img)
+        img_array = tf.expand_dims(img_array, 0) # Create a batch
+
+        predictions = model.predict(img_array)
+        score = tf.nn.softmax(predictions[0])
+
+        print(
+            "This image most likely belongs to {} with a {:.2f} percent confidence."
+                .format(classNames[np.argmax(score)], 100 * np.max(score))
+        )
+
+        img.show(title=classNames[np.argmax(score)])
