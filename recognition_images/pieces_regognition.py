@@ -72,8 +72,10 @@ if __name__ == '__main__':
     pathToModelSave = os.path.join(dirToSave, 'model.h5')
     model.save(pathToModelSave)
 
+'''
     test_chess_pieces_dir = 'images/images_to_test_model'
     files = os.listdir(test_chess_pieces_dir)
+
 
     for f in files:
 
@@ -89,4 +91,5 @@ if __name__ == '__main__':
                 .format(classNames[np.argmax(score)], 100 * np.max(score))
         )
 
-        img.show(title=classNames[np.argmax(score)])
+        #img.show(title=classNames[np.argmax(score)])
+'''
