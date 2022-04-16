@@ -3,5 +3,6 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/tensorflow/label_img" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/tensorflow/models" vcs="Git" />
   </component>
 </project>

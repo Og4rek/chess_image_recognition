@@ -7,7 +7,7 @@ import numpy as np
 
 if __name__ == '__main__':
     # odczytanie danych z fodleru
-    dataDir = 'images/pieces'
+    dataDir = 'recognition_images/images/pieces'
     dataSet = tf.keras.utils.image_dataset_from_directory(dataDir, image_size=(98, 98))
 
     # podzial danych na zbior uczacy, walidacyjny i tesotwy
@@ -66,17 +66,17 @@ if __name__ == '__main__':
     print(accuracyTest)
 
     # zapis h5
-    dirToSave = os.path.join(os.getcwd(), 'modelSave')
+    dirToSave = os.path.join(os.getcwd(), 'recognition_images/modelSave')
     if not os.path.isdir(dirToSave):
         os.makedirs(dirToSave)
-    pathToModelSave = os.path.join(dirToSave, 'model.h5')
+    pathToModelSave = os.path.join(dirToSave, 'recognition_images/model.h5')
     model.save(pathToModelSave)
 
-'''
-    test_chess_pieces_dir = 'images/images_to_test_model'
+
+    test_chess_pieces_dir = 'recognition_images/images/images_to_test_model'
     files = os.listdir(test_chess_pieces_dir)
 
-
+'''
     for f in files:
 
         img = tf.keras.utils.load_img(test_chess_pieces_dir+'/'+f, target_size=(98, 98))
