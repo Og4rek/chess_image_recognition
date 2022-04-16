@@ -1,6 +1,11 @@
 import os
 from git import Repo
 import object_detection
+import tensorflow as tf
+from object_detection.utils import config_util
+from object_detection.protos import pipeline_pb2
+from google.protobuf import text_format
+
 
 if __name__ == '__main__':
     # names of models
@@ -28,7 +33,7 @@ if __name__ == '__main__':
     files = {
         'PIPELINE_CONFIG': os.path.join('tensorflow', 'workspace', 'models', CUSTOM_MODEL_NAME, 'pipeline.config'),
         'TF_RECORD_SCRIPT': os.path.join(paths['SCRIPTS_PATH'], TF_RECORD_SCRIPT_NAME),
-        'LABALMAP': os.path.join(paths['ANNOTATION_PATH'], LABEL_MAP_NAME)
+        'LABELMAP': os.path.join(paths['ANNOTATION_PATH'], LABEL_MAP_NAME)
     }
 
     # make dirs for data
@@ -60,4 +65,62 @@ if __name__ == '__main__':
             os.system(cmd)
 
     # create label map
+    labels = [{'name': 'white_rook', 'id': 1}, {'name': 'white_knight', 'id': 2}, {'name': 'white_pawn', 'id': 3}, {'name': 'white_bishop', 'id': 4}]
+
+    with open(files['LABELMAP'], 'w') as f:
+        for label in labels:
+            f.write('item { \n')
+            f.write('\tname:\''+label['name']+'\'\n')
+            f.write('\tid:'+str(label['id'])+'\n')
+            f.write('}\n')
+
+    #create tfrecord
+    if not os.path.exists(files['TF_RECORD_SCRIPT']):
+        git_url = 'https://github.com/nicknochnack/GenerateTFRecord'
+        Repo.clone_from(git_url, paths['SCRIPTS_PATH'])
+
+    command = [
+        'python3.9 ' + files['TF_RECORD_SCRIPT'] + ' -x ' + os.path.join(paths['IMAGE_PATH'], 'train') + ' -l ' + files['LABELMAP'] + ' -o ' + os.path.join(paths['ANNOTATION_PATH'], 'train.record'),
+        'python3.9 ' + files['TF_RECORD_SCRIPT'] + ' -x ' + os.path.join(paths['IMAGE_PATH'], 'test') + ' -l ' + files['LABELMAP'] + ' -o ' + os.path.join(paths['ANNOTATION_PATH'], 'test.record'),
+        ]
+
+    if not os.path.exists(os.path.join(paths['ANNOTATION_PATH'], 'test.record')):
+        for cmd in command:
+            os.system(cmd)
+
+    # Copy Model Config to Training Folder
+    command = 'cp ' + os.path.join(paths['PRETRAINED_MODEL_PATH'], PRETRAINED_MODEL_NAME, 'pipeline.config') + ' ' + os.path.join(paths['CHECKPOINT_PATH'])
+    os.system(command)
+
+    # Update config
+    config = config_util.get_configs_from_pipeline_file(files['PIPELINE_CONFIG'])
+
+    pipeline_config = pipeline_pb2.TrainEvalPipelineConfig()
+    with tf.io.gfile.GFile(files['PIPELINE_CONFIG'], "r") as f:
+        proto_str = f.read()
+        text_format.Merge(proto_str, pipeline_config)
+
+    pipeline_config.model.ssd.num_classes = len(labels)
+    pipeline_config.train_config.batch_size = 4
+    pipeline_config.train_config.fine_tune_checkpoint = os.path.join(paths['PRETRAINED_MODEL_PATH'], PRETRAINED_MODEL_NAME, 'checkpoint', 'ckpt-0')
+    pipeline_config.train_config.fine_tune_checkpoint_type = "detection"
+    pipeline_config.train_input_reader.label_map_path= files['LABELMAP']
+    pipeline_config.train_input_reader.tf_record_input_reader.input_path[:] = [os.path.join(paths['ANNOTATION_PATH'], 'train.record')]
+    pipeline_config.eval_input_reader[0].label_map_path = files['LABELMAP']
+    pipeline_config.eval_input_reader[0].tf_record_input_reader.input_path[:] = [os.path.join(paths['ANNOTATION_PATH'], 'test.record')]
+
+    config_text = text_format.MessageToString(pipeline_config)
+    with tf.io.gfile.GFile(files['PIPELINE_CONFIG'], "wb") as f:
+        f.write(config_text)
+
+    # Training the model
+    TRAINING_SCRIPT = os.path.join(paths['APIMODEL_PATH'], 'research', 'object_detection', 'model_main_tf2.py')
+    command = "python3.9 " + TRAINING_SCRIPT + " --model_dir=" + paths['CHECKPOINT_PATH'] + " --pipeline_config_path=" + files['PIPELINE_CONFIG'] + " --num_train_steps=2000"
+    #print(command)
+    #os.system(command)
+
+    # Evaluation
+    command = "python3.9   {} --model_dir={} --pipeline_config_path={} --checkpoint_dir={}".format(TRAINING_SCRIPT, paths['CHECKPOINT_PATH'],files['PIPELINE_CONFIG'], paths['CHECKPOINT_PATH'])
+    #print(command)
+    #os.system(command)
 
