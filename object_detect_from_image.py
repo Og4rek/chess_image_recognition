@@ -55,7 +55,7 @@ if __name__ == '__main__':
         return detections
 
     category_index = label_map_util.create_category_index_from_labelmap(files['LABELMAP'])
-    IMAGE_PATH = os.path.join(paths['IMAGE_PATH'], 'test', 'img.png')
+    IMAGE_PATH = os.path.join(paths['IMAGE_PATH'], 'test', 'img1.png')
 
     img = cv2.imread(IMAGE_PATH)
     image_np = np.array(img)
@@ -81,8 +81,8 @@ if __name__ == '__main__':
         detections['detection_scores'],
         category_index,
         use_normalized_coordinates=True,
-        max_boxes_to_draw=5,
-        min_score_thresh=.8,
+        max_boxes_to_draw=32,
+        min_score_thresh=0.00001,
         agnostic_mode=False)
 
     plt.imshow(cv2.cvtColor(image_np_with_detections, cv2.COLOR_BGR2RGB))

@@ -65,7 +65,8 @@ if __name__ == '__main__':
             os.system(cmd)
 
     # create label map
-    labels = [{'name': 'white_rook', 'id': 1}, {'name': 'white_knight', 'id': 2}, {'name': 'white_pawn', 'id': 3}, {'name': 'white_bishop', 'id': 4}]
+    labels = [{'name': 'rook', 'id': 1}, {'name': 'knight', 'id': 2}, {'name': 'pawn', 'id': 3},
+              {'name': 'bishop', 'id': 4}, {'name': 'king', 'id': 5}, {'name': 'queen', 'id': 6}]
 
     with open(files['LABELMAP'], 'w') as f:
         for label in labels:
@@ -101,10 +102,10 @@ if __name__ == '__main__':
         text_format.Merge(proto_str, pipeline_config)
 
     pipeline_config.model.ssd.num_classes = len(labels)
-    pipeline_config.train_config.batch_size = 4
+    pipeline_config.train_config.batch_size = 2
     pipeline_config.train_config.fine_tune_checkpoint = os.path.join(paths['PRETRAINED_MODEL_PATH'], PRETRAINED_MODEL_NAME, 'checkpoint', 'ckpt-0')
     pipeline_config.train_config.fine_tune_checkpoint_type = "detection"
-    pipeline_config.train_input_reader.label_map_path= files['LABELMAP']
+    pipeline_config.train_input_reader.label_map_path = files['LABELMAP']
     pipeline_config.train_input_reader.tf_record_input_reader.input_path[:] = [os.path.join(paths['ANNOTATION_PATH'], 'train.record')]
     pipeline_config.eval_input_reader[0].label_map_path = files['LABELMAP']
     pipeline_config.eval_input_reader[0].tf_record_input_reader.input_path[:] = [os.path.join(paths['ANNOTATION_PATH'], 'test.record')]
@@ -116,11 +117,11 @@ if __name__ == '__main__':
     # Training the model
     TRAINING_SCRIPT = os.path.join(paths['APIMODEL_PATH'], 'research', 'object_detection', 'model_main_tf2.py')
     command = "python3.9 " + TRAINING_SCRIPT + " --model_dir=" + paths['CHECKPOINT_PATH'] + " --pipeline_config_path=" + files['PIPELINE_CONFIG'] + " --num_train_steps=2000"
-    #print(command)
-    #os.system(command)
+    print(command)
+    os.system(command)
 
     # Evaluation
-    command = "python3.9   {} --model_dir={} --pipeline_config_path={} --checkpoint_dir={}".format(TRAINING_SCRIPT, paths['CHECKPOINT_PATH'],files['PIPELINE_CONFIG'], paths['CHECKPOINT_PATH'])
-    #print(command)
-    #os.system(command)
+    command = "python3.9 {} --model_dir={} --pipeline_config_path={} --checkpoint_dir={}".format(TRAINING_SCRIPT, paths['CHECKPOINT_PATH'], files['PIPELINE_CONFIG'], paths['CHECKPOINT_PATH'])
+    print(command)
+    os.system(command)
 

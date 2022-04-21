@@ -3,7 +3,7 @@ from git import Repo
 
 if __name__ == '__main__':
 
-    labels = ['white_rook', 'white_knight', 'white_pawn', "white_bishop"]
+    labels = ['rook', 'knight', 'pawn', 'bishop', 'king', 'queen']
     number_img = 5
 
     images_path = os.path.join('tensorflow', 'workspace', 'images', 'colletedimages')

@@ -1,16 +1,24 @@
 item { 
-	name:'white_rook'
+	name:'rook'
 	id:1
 }
 item { 
-	name:'white_knight'
+	name:'knight'
 	id:2
 }
 item { 
-	name:'white_pawn'
+	name:'pawn'
 	id:3
 }
 item { 
-	name:'white_bishop'
+	name:'bishop'
 	id:4
+}
+item { 
+	name:'king'
+	id:5
+}
+item { 
+	name:'queen'
+	id:6
 }
