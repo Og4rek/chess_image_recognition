@@ -1,0 +1,26 @@
+<annotation>
+	<folder>white_queen</folder>
+	<filename>white_queen04.png</filename>
+	<path>/Users/piti/PycharmProjects/chess_image_recognition/tensorflow/workspace/images/colletedimages/white_queen/white_queen04.png</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1440</width>
+		<height>900</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>white_queen</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>402</xmin>
+			<ymin>240</ymin>
+			<xmax>473</xmax>
+			<ymax>312</ymax>
+		</bndbox>
+	</object>
+</annotation>

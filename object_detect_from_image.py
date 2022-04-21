@@ -82,7 +82,7 @@ if __name__ == '__main__':
         category_index,
         use_normalized_coordinates=True,
         max_boxes_to_draw=32,
-        min_score_thresh=0.00001,
+        min_score_thresh=0.8,
         agnostic_mode=False)
 
     plt.imshow(cv2.cvtColor(image_np_with_detections, cv2.COLOR_BGR2RGB))

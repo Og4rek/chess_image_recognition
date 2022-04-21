@@ -1,0 +1,26 @@
+<annotation>
+	<folder>black_knight</folder>
+	<filename>black_knight27.png</filename>
+	<path>/Users/piti/PycharmProjects/chess_image_recognition/tensorflow/workspace/images/colletedimages/black_knight/black_knight27.png</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1440</width>
+		<height>900</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>black_knight</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>578</xmin>
+			<ymin>412</ymin>
+			<xmax>640</xmax>
+			<ymax>484</ymax>
+		</bndbox>
+	</object>
+</annotation>

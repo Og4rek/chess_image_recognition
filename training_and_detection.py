@@ -1,6 +1,5 @@
 import os
 from git import Repo
-import object_detection
 import tensorflow as tf
 from object_detection.utils import config_util
 from object_detection.protos import pipeline_pb2
@@ -65,8 +64,10 @@ if __name__ == '__main__':
             os.system(cmd)
 
     # create label map
-    labels = [{'name': 'rook', 'id': 1}, {'name': 'knight', 'id': 2}, {'name': 'pawn', 'id': 3},
-              {'name': 'bishop', 'id': 4}, {'name': 'king', 'id': 5}, {'name': 'queen', 'id': 6}]
+    labels = [{'name': 'white_rook', 'id': 1}, {'name': 'white_knight', 'id': 2}, {'name': 'white_pawn', 'id': 3},
+              {'name': 'white_bishop', 'id': 4}, {'name': 'white_king', 'id': 5}, {'name': 'white_queen', 'id': 6},
+              {'name': 'black_rook', 'id': 7}, {'name': 'black_knight', 'id': 8}, {'name': 'black_pawn', 'id': 9},
+              {'name': 'black_bishop', 'id': 10}, {'name': 'black_king', 'id': 11}, {'name': 'black_queen', 'id': 12}]
 
     with open(files['LABELMAP'], 'w') as f:
         for label in labels:
@@ -102,7 +103,7 @@ if __name__ == '__main__':
         text_format.Merge(proto_str, pipeline_config)
 
     pipeline_config.model.ssd.num_classes = len(labels)
-    pipeline_config.train_config.batch_size = 2
+    pipeline_config.train_config.batch_size = 1
     pipeline_config.train_config.fine_tune_checkpoint = os.path.join(paths['PRETRAINED_MODEL_PATH'], PRETRAINED_MODEL_NAME, 'checkpoint', 'ckpt-0')
     pipeline_config.train_config.fine_tune_checkpoint_type = "detection"
     pipeline_config.train_input_reader.label_map_path = files['LABELMAP']

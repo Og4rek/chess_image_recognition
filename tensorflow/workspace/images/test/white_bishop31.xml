@@ -1,0 +1,26 @@
+<annotation>
+	<folder>white_bishop</folder>
+	<filename>white_bishop31.png</filename>
+	<path>/Users/piti/PycharmProjects/chess_image_recognition/tensorflow/workspace/images/colletedimages/white_bishop/white_bishop31.png</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1440</width>
+		<height>900</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>white_bishop</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>582</xmin>
+			<ymin>497</ymin>
+			<xmax>635</xmax>
+			<ymax>570</ymax>
+		</bndbox>
+	</object>
+</annotation>
